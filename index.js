@@ -280,7 +280,7 @@ function generateHTML2(data) {
         <div class="container">
           <div class="row">
             <div class="col">
-              <h1>Bio: ${userBio}</h1>
+              <h2>${userBio}</h2>
             </div>
           </div>
           <div class="row">
