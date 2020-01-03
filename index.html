@@ -1,111 +1,4 @@
-const fs = require("fs");
-const util = require("util");
-const axios = require("axios");
-const inquirer = require("inquirer");
-
-const colors = {
-  green: {
-    wrapperBackground: "#E6E1C3",
-    headerBackground: "#C1C72C",
-    headerColor: "black",
-    photoBorderColor: "#black"
-  },
-  blue: {
-    wrapperBackground: "#5F64D3",
-    headerBackground: "#26175A",
-    headerColor: "white",
-    photoBorderColor: "#73448C"
-  },
-  pink: {
-    wrapperBackground: "#879CDF",
-    headerBackground: "#FF8374",
-    headerColor: "white",
-    photoBorderColor: "#FEE24C"
-  },
-  red: {
-    wrapperBackground: "#DE9967",
-    headerBackground: "#870603",
-    headerColor: "white",
-    photoBorderColor: "white"
-  }
-};
-
-// variable for profile image
-let profileimage;
-// variable user name
-let userName;
-// variable link to user location
-let userLocation;
-// variable link to github profile
-let userGithubProfile;
-// variable link to user blog
-let userBlog;
-// variable user bio
-let userBio;
-// variable # of public repositories
-let numRepo;
-// variable # of followers
-let numFollowers;
-// variable # of GitHub stars
-let numGithubStars;
-// variable # of user followings
-let numUsersfollowing;
-// variable for compnay
-let userCompany;
-// store user's favorite color
-let userFavColor;
-
-const writeFileAsync = util.promisify(fs.writeFile);
-const appendFileAsync = util.promisify(fs.appendFile);
-
-function promptUser() {
-  return inquirer.prompt([{
-        message: "Enter you GitHub username",
-        name: "username"
-      },
-      {
-        type: "list",
-        name: "color",
-        message: "What is your favorite color?",
-        choices: ["pink",
-          "red",
-          "blue",
-          "green"
-        ]
-      }
-    ])
-    .then(function ({
-      username,
-      color,
-    }) {
-      const queryUrl = `https://api.github.com/users/${username}`;
-      console.log(username);
-      console.log(color);
-      userFavColor = color;
-
-      axios.get(queryUrl).then(function (result) {
-        profileimage = result.data.avatar_url;
-        userName = result.data.login;
-        userLocation = result.data.location;
-        userGithubProfile = result.data.html_url;
-        userBlog = result.data.blog;
-        userBio = result.data.bio;
-        numRepo = result.data.public_repos
-        numFollowers = result.data.followers;
-        // numGithubStars = 
-        numUsersfollowing = result.data.following;
-        userCompany = result.data.company;
-        console.log(result)
-  
-        const html2 = generateHTML2();
-        return appendFileAsync("index.html", html2);
-      });
-
-    });
-}
-
-function generateHTML(data) {
-  return `<!DOCTYPE html>
+<!DOCTYPE html>
   <html lang="en">
      <head>
         <meta charset="UTF-8" />
@@ -131,7 +24,7 @@ function generateHTML(data) {
            height: 100%;
            }
            .wrapper {
-           background-color: ${colors[userFavColor].wrapperBackground};
+           background-color: #E6E1C3;
            padding-top: 100px;
            }
            body {
@@ -173,8 +66,8 @@ function generateHTML(data) {
            display: flex;
            justify-content: center;
            flex-wrap: wrap;
-           background-color: ${colors[userFavColor].headerBackground};
-           color: ${colors[userFavColor].headerColor};
+           background-color: #C1C72C;
+           color: black;
            padding: 10px;
            width: 95%;
            border-radius: 6px;
@@ -185,7 +78,7 @@ function generateHTML(data) {
            border-radius: 50%;
            object-fit: cover;
            margin-top: -75px;
-           border: 6px solid ${colors[userFavColor].photoBorderColor};
+           border: 6px solid #black;
            box-shadow: rgba(0, 0, 0, 0.3) 4px 1px 20px 4px;
            }
            .photo-header h1, .photo-header h2 {
@@ -228,8 +121,8 @@ function generateHTML(data) {
            .card {
              padding: 20px;
              border-radius: 6px;
-             background-color: ${colors[userFavColor].headerBackground};
-             color: ${colors[userFavColor].headerColor};
+             background-color: #C1C72C;
+             color: black;
              margin: 20px;
            }
            
@@ -249,29 +142,25 @@ function generateHTML(data) {
               zoom: .75; 
             } 
            }
-        </style>`
-}
-
-function generateHTML2(data) {
-  return `
+        </style>
     </head>
     <body>
     <div class="wrapper">
       <div class="container">
         <div class="photo-header">
-          <img src="${profileimage}" alt="image">
+          <img src="https://avatars1.githubusercontent.com/u/54822096?v=4" alt="image">
           <h1>Hi!</h1>
-          <h2>My name is ${userName}</h2>
-          <h5>Currently @ ${userCompany}</h5>
+          <h2>My name is sarkwon89</h2>
+          <h5>Currently @ Amazon</h5>
           <div class="links-nav">
             <div class="nav-link">
-              ${userLocation}
+              Seattle, Washington
             </div>
             <div class="nav-link">
-              <a href="${userGithubProfile}">GitHub</a>
+              <a href="https://github.com/sarkwon89">GitHub</a>
             </div>
             <div class="nav-link">
-              <a href="${userBlog}">Blog</a>
+              <a href="https://sarkwon89.github.io/sarahkwonwebsite/home">Blog</a>
             </div>
           </div>
         </div>
@@ -280,17 +169,17 @@ function generateHTML2(data) {
         <div class="container">
           <div class="row">
             <div class="col">
-              <h1>Bio: ${userBio}</h1>
+              <h1>Bio: UX Program Manager</h1>
             </div>
           </div>
           <div class="row">
             <div class="card col">
               <h2>Public Repositories</h2>
-              <h3>${numRepo}</h3>
+              <h3>9</h3>
             </div>
             <div class="card col">
               <h2>Followers</h2>
-              <h3>${numFollowers}</h3>
+              <h3>0</h3>
             </div>
           </div>
           <div class="row">
@@ -301,41 +190,11 @@ function generateHTML2(data) {
             </div>
             <div class="card col">
               <h2>Following</h2>
-              <h3>${numUsersfollowing}</h3>
+              <h3>0</h3>
             </div>
           </div>
         </div>
       </div>
     </div>
   </body>
-  </html>`
-}
-
-promptUser()
-  .then(function (answers) {
-    // console.log(answers)
-    const html = generateHTML(answers);
-    // console.log(userName);
-    // console.log(profileimage);
-    return writeFileAsync("index.html", html);
-  })
-// .then(function() {
-//   const html2 = generateHTML2();
-//   return appendFileAsync("index.html", html2);  
-// })
-// .catch(function(err) {
-//   console.log(err);
-// });
-
-
-// const questions = [
-
-// ];
-
-// function writeToFile(fileName, data) {
-
-// }
-
-// function init() {
-
-//     init();
+  </html>
