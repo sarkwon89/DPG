@@ -4,31 +4,31 @@ const axios = require("axios");
 const inquirer = require("inquirer");
 
 const colors = {
-    green: {
-      wrapperBackground: "#E6E1C3",
-      headerBackground: "#C1C72C",
-      headerColor: "black",
-      photoBorderColor: "#black"
-    },
-    blue: {
-      wrapperBackground: "#5F64D3",
-      headerBackground: "#26175A",
-      headerColor: "white",
-      photoBorderColor: "#73448C"
-    },
-    pink: {
-      wrapperBackground: "#879CDF",
-      headerBackground: "#FF8374",
-      headerColor: "white",
-      photoBorderColor: "#FEE24C"
-    },
-    red: {
-      wrapperBackground: "#DE9967",
-      headerBackground: "#870603",
-      headerColor: "white",
-      photoBorderColor: "white"
-    }
-  };
+  green: {
+    wrapperBackground: "#E6E1C3",
+    headerBackground: "#C1C72C",
+    headerColor: "black",
+    photoBorderColor: "#black"
+  },
+  blue: {
+    wrapperBackground: "#5F64D3",
+    headerBackground: "#26175A",
+    headerColor: "white",
+    photoBorderColor: "#73448C"
+  },
+  pink: {
+    wrapperBackground: "#879CDF",
+    headerBackground: "#FF8374",
+    headerColor: "white",
+    photoBorderColor: "#FEE24C"
+  },
+  red: {
+    wrapperBackground: "#DE9967",
+    headerBackground: "#870603",
+    headerColor: "white",
+    photoBorderColor: "white"
+  }
+};
 
 // variable for profile image
 let profileimage;
@@ -57,44 +57,52 @@ const writeFileAsync = util.promisify(fs.writeFile);
 const appendFileAsync = util.promisify(fs.appendFile);
 
 function promptUser() {
-    return inquirer.prompt([{
-                message: "Enter you GitHub username",
-                name: "username"
-            },
-            {
-                type: "input",
-                name: "color",
-                message: "What is your favorite color?"
-            }
-        ])
-        .then(function ({
-            username,
-            color
-        }) {
-            const queryUrl = `https://api.github.com/users/${username}`;
-            console.log(username);
-            console.log(color);
-            userFavColor = color;
+  return inquirer.prompt([{
+        message: "Enter you GitHub username",
+        name: "username"
+      },
+      {
+        type: "list",
+        name: "color",
+        message: "What is your favorite color?",
+        choices: ["pink",
+          "red",
+          "blue",
+          "green"
+        ]
+      }
+    ])
+    .then(function ({
+      username,
+      color,
+    }) {
+      const queryUrl = `https://api.github.com/users/${username}`;
+      console.log(username);
+      console.log(color);
+      userFavColor = color;
 
-            axios.get(queryUrl).then(function (result) {
-                profileimage = result.data.avatar_url;
-                userName = result.data.login;
-                // userLocation = 
-                userGithubProfile = result.data.userLocation;
-                userBlog = result.data.blog;
-                userBio = result.data.bio;
-                numRepo = result.data.public_repos
-                numFollowers = result.data.followers;
-                // numGithubStars = 
-                numUsersfollowing = result.data.following;
-                // console.log(profileimage);
-                // console.log(userName);
-            });
-        });
+      axios.get(queryUrl).then(function (result) {
+        profileimage = result.data.avatar_url;
+        userName = result.data.login;
+        // userLocation = 
+        userGithubProfile = result.data.userLocation;
+        userBlog = result.data.blog;
+        userBio = result.data.bio;
+        numRepo = result.data.public_repos
+        numFollowers = result.data.followers;
+        // numGithubStars = 
+        numUsersfollowing = result.data.following;
+        // console.log(profileimage);
+        // console.log(userName);
+        // console.log(result)
+        generateHTML2()
+      });
+
+    });
 }
 
 function generateHTML(data) {
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
   <html lang="en">
      <head>
         <meta charset="UTF-8" />
@@ -239,10 +247,10 @@ function generateHTML(data) {
             } 
            }
         </style>`
-          }
+}
 
-function generateHTML2(data){
-    return `
+function generateHTML2(data) {
+  return `
     </head>
     <body>
     <div class="wrapper">
@@ -297,23 +305,24 @@ function generateHTML2(data){
       </div>
     </div>
   </body>
-  </html>`  
+  </html>`
 }
 
 promptUser()
-  .then(function() {
-    const html = generateHTML();
-    console.log(userName);
-    console.log(profileimage);
+  .then(function (answers) {
+    // console.log(answers)
+    const html = generateHTML(answers);
+    // console.log(userName);
+    // console.log(profileimage);
     return writeFileAsync("index.html", html);
   })
-  .then(function() {
-    const html2 = generateHTML2();
-    return appendFileAsync("index.html", html2);  
-  })
-  .catch(function(err) {
-    console.log(err);
-  });
+// .then(function() {
+//   const html2 = generateHTML2();
+//   return appendFileAsync("index.html", html2);  
+// })
+// .catch(function(err) {
+//   console.log(err);
+// });
 
 
 // const questions = [
