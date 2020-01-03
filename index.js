@@ -54,6 +54,7 @@ let numUsersfollowing
 let userFavColor
 
 const writeFileAsync = util.promisify(fs.writeFile);
+const appendFileAsync = util.promisify(fs.appendFile);
 
 function promptUser() {
     return inquirer.prompt([{
@@ -90,10 +91,6 @@ function promptUser() {
             });
         });
 }
-
-let secondHalfHtml = `
-<body>
-<h1> name ${userName}`
 
 function generateHTML(data) {
     return `<!DOCTYPE html>
@@ -243,13 +240,77 @@ function generateHTML(data) {
         </style>`
           }
 
+function generateHTML2(data){
+    return `</head>
+    <body>
+    <div class="wrapper">
+      <div class="container">
+        <div class="photo-header">
+          <img src="" alt="">
+          <h1>Hi!</h1>
+          <h2>My name is SK</h2>
+          <h5>Currently @ UW Coding Bootcamp</h5>
+          <div class="links-nav">
+            <div class="nav-link">
+              <a href="">Location</a>
+            </div>
+            <div class="nav-link">
+              <a href="">GitHub</a>
+            </div>
+            <div class="nav-link">
+              <a href="">Blog</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="main">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <h1>TEST</h1>
+            </div>
+          </div>
+          <div class="row">
+            <div class="card col">
+              <h2>Public Repositories</h2>
+              <!--arbitrary value-->
+              <h3>100</h3>
+            </div>
+            <div class="card col">
+              <h2>Followers</h2>
+              <!--arbitrary value-->
+              <h3>100</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="card col">
+              <h2>GitHub Stars</h2>
+              <!--arbitrary value-->
+              <h3>100</h3>
+            </div>
+            <div class="card col">
+              <h2>Following</h2>
+              <!--arbitrary value-->
+              <h3>100</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  </html>`  
+}
+
 promptUser()
-  .then(function(answers) {
-    const html = generateHTML(answers);
+  .then(function() {
+    const html = generateHTML();
 
     return writeFileAsync("index.html", html);
   })
   .then(function() {
+    const html2 = generateHTML2();
+    return appendFileAsync("index.html", html2);
+  
     console.log("Successfully wrote to index.html");
   })
   .catch(function(err) {
