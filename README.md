@@ -9,7 +9,7 @@ node index.js
 # How it works
 The user will be prompted for a favorite color, which will be used as the background color for cards.
 
-The PDF will be populate the following:
+The user will be prompted to provide github username which will then populate the PDF with the following:
 
 * Profile image
 * User name

@@ -101,32 +101,32 @@ function promptUser() {
         userCompany = result.data.company;
 
         // console.log(result)
-        const html2 = generateHTML2();
-        return appendFileAsync("index.html", html2);
-      });
+        const html = generateHTML2();
+        return appendFileAsync("index.html", html);
+      })
+      .then(function () {
+        //code snippet to create pdf
+        let html = fs.readFileSync("index.html", "utf8");
+        let options = {
+          format: "Letter"
+        };
+    
+        pdf.create(html, options).toFile('./developerprofilegenerator.pdf', function (err, res) {
+          if (err) return console.log(err);
+          console.log(res); // { filename: '' }
+        });
+      })
 
-
-      //axio call to get all the repos I have starred
+      //axio call to get all the repos I have starred. Then count the # of repos from the object array to get total count of stars
       // axios.get(queryUrl2).then(function (result2) {
       //   const objStarred = result2
       //   const totalSum =
       //     // console.log(result2)
       // });
 
-      //code snippet to create pdf
-      let html = fs.readFileSync("index.html", "utf8");
-      let options = {
-        format: "A4"
-      };
-
-
-      pdf.create(html, options).toFile('./developerprofilegenerator.pdf', function (err, res) {
-        if (err) return console.log(err);
-        console.log(res); // { filename: '/app/businesscard.pdf' }
-      });
-
-
     });
+    
+
 }
 
 function generateHTML(data) {
@@ -230,10 +230,8 @@ function generateHTML(data) {
            display: inline-block;
            margin: 5px 10px;
            }
-           .workExp-date {
-           font-style: italic;
-           font-size: .7em;
-           text-align: right;
+           .company {
+           text-align: center;
            margin-top: 10px;
            }
            .container {
@@ -287,7 +285,7 @@ function generateHTML2(data) {
           <img src="${profileimage}" alt="image">
           <h1>Hi!</h1>
           <h2>My name is ${userName}</h2>
-          <h5>Currently @ ${userCompany}</h5>
+          <h5 class = "company">Currently @ ${userCompany}</h5>
           <div class="links-nav">
             <div class="nav-link">
             <i class="fas fa-location-arrow"></i>
