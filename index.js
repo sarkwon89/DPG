@@ -1,8 +1,11 @@
+//all my variables to reference npm packages
 const fs = require("fs");
 const util = require("util");
 const axios = require("axios");
 const inquirer = require("inquirer");
+const pdf = require("html-pdf");
 
+//my array of objects
 const colors = {
   green: {
     wrapperBackground: "#E6E1C3",
@@ -79,9 +82,11 @@ function promptUser() {
       color,
     }) {
       const queryUrl = `https://api.github.com/users/${username}`;
-      console.log(username);
-      console.log(color);
+      // console.log(username);
+      // console.log(color);
       userFavColor = color;
+
+      const queryUrl2 = `https://api.github.com/users/${username}/starred`
 
       axios.get(queryUrl).then(function (result) {
         profileimage = result.data.avatar_url;
@@ -90,15 +95,29 @@ function promptUser() {
         userGithubProfile = result.data.html_url;
         userBlog = result.data.blog;
         userBio = result.data.bio;
-        numRepo = result.data.public_repos
+        numRepo = result.data.public_repos;
         numFollowers = result.data.followers;
-        // numGithubStars = 
         numUsersfollowing = result.data.following;
         userCompany = result.data.company;
-        console.log(result)
-  
+
+        // console.log(result)
         const html2 = generateHTML2();
         return appendFileAsync("index.html", html2);
+      });
+
+      // axios.get(queryUrl2).then(function (result2) {
+      //   const objStarred = result2
+      //   const totalSum =
+      //     // console.log(result2)
+      // });
+
+      let html = fs.readFileSync("index.html", "utf8");
+      let options = { format: "A4"};
+
+
+      pdf.create(html, options).toFile('./developerprofilegenerator.pdf', function(err, res) {
+        if (err) return console.log(err);
+        console.log(res); // { filename: '/app/businesscard.pdf' }
       });
 
     });
@@ -265,12 +284,15 @@ function generateHTML2(data) {
           <h5>Currently @ ${userCompany}</h5>
           <div class="links-nav">
             <div class="nav-link">
-              ${userLocation}
+            <i class="fas fa-location-arrow"></i>
+            <a href="https://www.google.com/maps/place/${userLocation}">${userLocation}</a>
             </div>
             <div class="nav-link">
+              <i class="fab fa-github-alt"></i>
               <a href="${userGithubProfile}">GitHub</a>
             </div>
             <div class="nav-link">
+              <i class="fas fa-blog"></i>
               <a href="${userBlog}">Blog</a>
             </div>
           </div>
@@ -313,19 +335,14 @@ function generateHTML2(data) {
 
 promptUser()
   .then(function (answers) {
-    // console.log(answers)
     const html = generateHTML(answers);
-    // console.log(userName);
-    // console.log(profileimage);
     return writeFileAsync("index.html", html);
   })
-// .then(function() {
-//   const html2 = generateHTML2();
-//   return appendFileAsync("index.html", html2);  
-// })
-// .catch(function(err) {
-//   console.log(err);
-// });
+  .catch(function (err) {
+    console.log(err);
+  });
+
+
 
 
 // const questions = [

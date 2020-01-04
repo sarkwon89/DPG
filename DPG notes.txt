@@ -1,8 +1,8 @@
 QUESTIONS TO ASK:
-1. let variable undefined outside of axios call
-2. does our html need to look exactly like mock up
-3. location
-4. stars
+1. let variable undefined outside of axios call-resolved
+2. does our html need to look exactly like mock up-
+3. location-resolved
+4. stars-
 5. convert into pdf
 
 PSUEDO CODE
@@ -36,60 +36,3 @@ step 8: fill the data dynamically using the html file
 
 step 9: generate pdf
 
-<body>
-  <div class="wrapper">
-    <div class="container">
-      <div class="photo-header">
-        <img src="" alt="">
-        <h1>Hi!</h1>
-        <h2>My name is SK</h2>
-        <h5>Currently @ UW Coding Bootcamp</h5>
-        <div class="links-nav">
-          <div class="nav-link">
-            <a href="">Location</a>
-          </div>
-          <div class="nav-link">
-            <a href="">GitHub</a>
-          </div>
-          <div class="nav-link">
-            <a href="">Blog</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="main">
-      <div class="container">
-        <div class="row">
-          <div class="col">
-            <h1>TEST</h1>
-          </div>
-        </div>
-        <div class="row">
-          <div class="card col">
-            <h2>Public Repositories</h2>
-            <!--arbitrary value-->
-            <h3>100</h3>
-          </div>
-          <div class="card col">
-            <h2>Followers</h2>
-            <!--arbitrary value-->
-            <h3>100</h3>
-          </div>
-        </div>
-        <div class="row">
-          <div class="card col">
-            <h2>GitHub Stars</h2>
-            <!--arbitrary value-->
-            <h3>100</h3>
-          </div>
-          <div class="card col">
-            <h2>Following</h2>
-            <!--arbitrary value-->
-            <h3>100</h3>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</body>
-</head>
