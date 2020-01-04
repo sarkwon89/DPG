@@ -105,20 +105,26 @@ function promptUser() {
         return appendFileAsync("index.html", html2);
       });
 
+
+      //axio call to get all the repos I have starred
       // axios.get(queryUrl2).then(function (result2) {
       //   const objStarred = result2
       //   const totalSum =
       //     // console.log(result2)
       // });
 
+      //code snippet to create pdf
       let html = fs.readFileSync("index.html", "utf8");
-      let options = { format: "A4"};
+      let options = {
+        format: "A4"
+      };
 
 
-      pdf.create(html, options).toFile('./developerprofilegenerator.pdf', function(err, res) {
+      pdf.create(html, options).toFile('./developerprofilegenerator.pdf', function (err, res) {
         if (err) return console.log(err);
         console.log(res); // { filename: '/app/businesscard.pdf' }
       });
+
 
     });
 }
@@ -341,18 +347,3 @@ promptUser()
   .catch(function (err) {
     console.log(err);
   });
-
-
-
-
-// const questions = [
-
-// ];
-
-// function writeToFile(fileName, data) {
-
-// }
-
-// function init() {
-
-//     init();
