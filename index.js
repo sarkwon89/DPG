@@ -4,6 +4,7 @@ const util = require("util");
 const axios = require("axios");
 const inquirer = require("inquirer");
 const pdf = require("html-pdf");
+const github = require("github-scraper");
 
 //my array of objects
 const colors = {
@@ -89,20 +90,31 @@ function promptUser() {
       const queryUrl2 = `https://api.github.com/users/${username}/starred`
 
       axios.get(queryUrl).then(function (result) {
-        profileimage = result.data.avatar_url;
-        userName = result.data.login;
-        userLocation = result.data.location;
-        userGithubProfile = result.data.html_url;
-        userBlog = result.data.blog;
-        userBio = result.data.bio;
-        numRepo = result.data.public_repos;
-        numFollowers = result.data.followers;
-        numUsersfollowing = result.data.following;
-        userCompany = result.data.company;
+          profileimage = result.data.avatar_url;
+          userName = result.data.login;
+          userLocation = result.data.location;
+          userGithubProfile = result.data.html_url;
+          userBlog = result.data.blog;
+          userBio = result.data.bio;
+          numRepo = result.data.public_repos;
+          numFollowers = result.data.followers;
+          numUsersfollowing = result.data.following;
+          userCompany = result.data.company;
 
-        // console.log(result)
-        const html = generateHTML2();
-        return appendFileAsync("index.html", html);
+
+          // //axio call to get all the repos I have starred. Then count the # of repos from the object array to get total count of stars
+          // axios.get(queryUrl2).then(function (result2) {
+          //     console.log(result2)
+          // });
+
+          github(username, function(err, data){
+            const html = generateHTML2(data.stars);
+            return appendFileAsync("index.html", html);
+
+          });
+
+          // console.log(result)
+
       })
       .then(function () {
         //code snippet to create pdf
@@ -110,22 +122,15 @@ function promptUser() {
         let options = {
           format: "Letter"
         };
-    
+
         pdf.create(html, options).toFile('./developerprofilegenerator.pdf', function (err, res) {
           if (err) return console.log(err);
           console.log(res); // { filename: '' }
         });
       })
 
-      //axio call to get all the repos I have starred. Then count the # of repos from the object array to get total count of stars
-      // axios.get(queryUrl2).then(function (result2) {
-      //   const objStarred = result2
-      //   const totalSum =
-      //     // console.log(result2)
-      // });
-
     });
-    
+
 
 }
 
@@ -275,7 +280,7 @@ function generateHTML(data) {
         </style>`
 }
 
-function generateHTML2(data) {
+function generateHTML2(stars) {
   return `
     </head>
     <body>
@@ -323,7 +328,7 @@ function generateHTML2(data) {
             <div class="card col">
               <h2>GitHub Stars</h2>
               <!--arbitrary value-->
-              <h3>TBD</h3>
+              <h3>${stars}</h3>
             </div>
             <div class="card col">
               <h2>Following</h2>
